@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="main-html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOUR AMR | Graphic Design Gallery</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Orbitron:wght@500;700;900&family=Plus+Jakarta+Sans:wght@400;600;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { 
+            --primary: #00ff66; /* أخضر نيون فاقع جداً */
+            --accent: #00d9f5;
+            --bg: #050508; 
+            --card-bg: rgba(10, 16, 26, 0.75);
+            --card-hover: rgba(16, 28, 45, 0.9);
+            --border: rgba(0, 255, 102, 0.2);
+            --border-glow: rgba(0, 255, 102, 0.7);
+            --text: #f1f5f9; 
+            --text-dim: #94a3b8;
+            
+            --glow-primary: 0 0 30px rgba(0, 255, 102, 0.6);
+            --glow-accent: 0 0 25px rgba(0, 217, 245, 0.35);
+
+            --font-main: 'Plus Jakarta Sans', 'Cairo', sans-serif;
+            --font-cyber: 'Orbitron', 'Cairo', sans-serif;
+            --font-code: 'Fira Code', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body { 
+            background-color: var(--bg); 
+            background-image: 
+                radial-gradient(circle at 50% 30%, rgba(0, 255, 102, 0.12) 0%, transparent 60%),
+                linear-gradient(rgba(0, 255, 102, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 102, 0.04) 1px, transparent 1px);
+            background-size: 100% 100%, 35px 35px, 35px 35px;
+            background-attachment: fixed;
+            color: var(--text); 
+            font-family: var(--font-main); 
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+            cursor: default;
+        }
+
+        /* Custom Glowing Cursor */
+        #cursor-dot {
+            width: 8px; height: 8px; background: var(--primary);
+            position: fixed; top: 0; left: 0; border-radius: 50%;
+            pointer-events: none; z-index: 99999; transform: translate(-50%, -50%);
+            box-shadow: var(--glow-primary); transition: transform 0.1s ease;
+        }
+        #cursor-outline {
+            width: 36px; height: 36px; border: 1.5px solid var(--primary);
+            position: fixed; top: 0; left: 0; border-radius: 50%;
+            pointer-events: none; z-index: 99998; transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, top 0.15s ease-out, left 0.15s ease-out;
+            opacity: 0.8;
+            box-shadow: inset 0 0 10px rgba(0, 255, 102, 0.3);
+        }
+
+        #canvas-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; pointer-events: none; }
+        .ambient-glow {
+            position: fixed; inset: 0;
+            background: radial-gradient(circle at 15% 15%, rgba(0, 255, 102, 0.09) 0%, transparent 50%),
+                        radial-gradient(circle at 85% 85%, rgba(0, 217, 245, 0.08) 0%, transparent 50%);
+            z-index: -1; pointer-events: none;
+        }
+
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 18px 8%; position: fixed; top: 0; width: 100%; z-index: 100;
+            backdrop-filter: blur(25px); border-bottom: 1px solid var(--border);
+            background: rgba(5, 5, 8, 0.85);
+        }
+
+        .brand { 
+            font-family: var(--font-cyber); font-weight: 900; font-size: 1.4rem; 
+            color: #fff; letter-spacing: 2px; display: flex; align-items: center; gap: 10px; text-decoration: none;
+            text-shadow: 0 0 12px rgba(0, 255, 102, 0.3);
+        }
+
+        .brand-dot { 
+            width: 9px; height: 9px; background: var(--primary); 
+            border-radius: 50%; box-shadow: var(--glow-primary); 
+            animation: pulse 2s infinite; 
+        }
+
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        .back-btn {
+            padding: 8px 22px; border: 1px solid var(--border-glow);
+            background: rgba(0, 255, 102, 0.08); color: var(--primary);
+            border-radius: 20px; font-family: var(--font-cyber); font-size: 0.8rem;
+            text-decoration: none; display: flex; align-items: center; gap: 8px;
+            transition: all 0.3s ease; box-shadow: 0 0 10px rgba(0, 255, 102, 0.15); font-weight: 700;
+        }
+        .back-btn:hover { background: var(--primary); color: #000; box-shadow: var(--glow-primary); transform: translateY(-2px); }
+
+        .page-header { padding: 150px 20px 30px; text-align: center; }
+        .page-title {
+            font-family: var(--font-cyber); font-size: clamp(1.8rem, 4.5vw, 3.2rem);
+            font-weight: 900; color: #fff; text-transform: uppercase; margin-bottom: 12px;
+            letter-spacing: 3px; text-shadow: 0 0 25px rgba(0, 255, 102, 0.3);
+        }
+        .page-subtitle { 
+            color: var(--primary); font-size: 0.95rem; font-family: var(--font-code); 
+            background: rgba(10, 16, 26, 0.85); display: inline-block; padding: 8px 20px; 
+            border-radius: 12px; border: 1px solid var(--border-glow); box-shadow: var(--glow-primary);
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px 20px 80px; }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 28px;
+        }
+
+        .gallery-item {
+            position: relative; border-radius: 22px; overflow: hidden;
+            background: var(--card-bg); border: 1px solid var(--border);
+            backdrop-filter: blur(20px); transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            display: flex; flex-direction: column; cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--border-glow); box-shadow: var(--glow-primary); background: var(--card-hover);
+        }
+
+        .img-wrapper {
+            width: 100%; height: 320px; overflow: hidden; position: relative; background: #000;
+        }
+
+        .gallery-img {
+            width: 100%; height: 100%; object-fit: cover; object-position: center;
+            display: block; transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .gallery-item:hover .gallery-img { transform: scale(1.08); }
+
+        .img-wrapper::after {
+            content: '\f002 CLICK TO ENLARGE';
+            font-family: 'Font Awesome 6 Free', var(--font-cyber);
+            font-weight: 900; position: absolute; inset: 0;
+            background: rgba(5, 5, 8, 0.85); color: var(--primary);
+            display: flex; align-items: center; justify-content: center;
+            gap: 10px; font-size: 0.9rem; letter-spacing: 2px;
+            opacity: 0; transition: opacity 0.35s ease;
+            backdrop-filter: blur(4px); text-shadow: var(--glow-primary);
+        }
+        .gallery-item:hover .img-wrapper::after { opacity: 1; }
+
+        .gallery-info {
+            padding: 24px; background: rgba(10, 16, 26, 0.9);
+            border-top: 1px solid var(--border); flex-grow: 1;
+        }
+
+        .gallery-tag {
+            display: inline-block; padding: 5px 12px; border-radius: 12px;
+            background: rgba(0, 255, 102, 0.1); border: 1px solid rgba(0, 255, 102, 0.3);
+            color: var(--primary); font-size: 0.72rem; font-family: var(--font-code);
+            margin-bottom: 12px; font-weight: 600; box-shadow: 0 0 10px rgba(0, 255, 102, 0.1);
+        }
+
+        .gallery-info h3 { color: #fff; font-size: 1.2rem; font-family: var(--font-cyber); margin-bottom: 8px; font-weight: 700; }
+        .gallery-info p { color: var(--text-dim); font-size: 0.9rem; line-height: 1.6; }
+
+        .image-modal {
+            position: fixed; inset: 0; z-index: 99999;
+            background: rgba(5, 5, 8, 0.95);
+            backdrop-filter: blur(20px);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.35s ease; padding: 20px; cursor: pointer;
+        }
+
+        .image-modal.active { opacity: 1; pointer-events: auto; }
+
+        .modal-content-box {
+            position: relative; max-width: 90vw; max-height: 90vh;
+            display: flex; flex-direction: column; align-items: center; cursor: default;
+        }
+
+        .modal-img {
+            max-width: 90vw; max-height: 80vh;
+            object-fit: contain; border-radius: 14px;
+            border: 1px solid var(--border-glow);
+            box-shadow: var(--glow-primary);
+        }
+
+        .modal-caption {
+            margin-top: 15px; color: #fff; font-family: var(--font-cyber);
+            font-size: 1.05rem; text-align: center; letter-spacing: 1.5px;
+            text-shadow: var(--glow-primary);
+        }
+
+        .modal-close {
+            position: absolute; top: -18px; left: -18px;
+            width: 42px; height: 42px; border-radius: 50%;
+            background: rgba(10, 16, 26, 0.95); border: 1px solid var(--border-glow);
+            color: var(--primary); font-size: 1.2rem;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease; cursor: pointer; box-shadow: var(--glow-primary);
+        }
+
+        .modal-close:hover { background: var(--primary); color: #000; transform: scale(1.1); }
+
+        @media (max-width: 768px) {
+            #cursor-dot, #cursor-outline { display: none; }
+            .modal-close { top: -12px; left: -10px; width: 36px; height: 36px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="cursor-dot"></div>
+    <div id="cursor-outline"></div>
+
+    <canvas id="canvas-bg"></canvas>
+    <div class="ambient-glow"></div>
+
+    <nav>
+        <a href="index.html" class="brand">
+            <div class="brand-dot"></div>
+            NOUR.EXE
+        </a>
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> BACK TO HOME</a>
+    </nav>
+
+    <div class="page-header">
+        <h1 class="page-title">GRAPHIC DESIGN GALLERY</h1>
+        <p class="page-subtitle">&gt; Educational Book Cover & Visual Artwork Portfolio</p>
+    </div>
+
+    <div class="container">
+        <div class="gallery-grid">
+            
+            <div class="gallery-item" onclick="openLightbox('boock cover.jpg', 'Science - Middle 1 (First Term)')">
+                <div class="img-wrapper">
+                    <img src="boock cover.jpg" alt="Science Middle 1 First Term" class="gallery-img">
+                </div>
+                <div class="gallery-info">
+                    <span class="gallery-tag">GREEN CYBER / FIRST TERM</span>
+                    <h3>Science - Middle 1</h3>
+                    <p>Science textbook cover design for Grade 7 featuring transparent chemical structures and phosphorescent green aesthetics.</p>
+                </div>
+            </div>
+
+            <div class="gallery-item" onclick="openLightbox('boock cover 3.jpg', 'Science - Middle 3 (First Term)')">
+                <div class="img-wrapper">
+                    <img src="boock cover 3.jpg" alt="Science Middle 3 First Term" class="gallery-img">
+                </div>
+                <div class="gallery-info">
+                    <span class="gallery-tag">NEON / FIRST TERM</span>
+                    <h3>Science - Middle 3</h3>
+                    <p>High-impact Grade 9 Science cover designed with dark contrast and glowing lighting accents.</p>
+                </div>
+            </div>
+
+            <div class="gallery-item" onclick="openLightbox('boock cover 2.jpg', 'Science - Middle 1 (2nd Term)')">
+                <div class="img-wrapper">
+                    <img src="boock cover 2.jpg" alt="Science Middle 1 Second Term" class="gallery-img">
+                </div>
+                <div class="gallery-info">
+                    <span class="gallery-tag">CINEMATIC / 2ND TERM</span>
+                    <h3>Science - Middle 1 (2nd Term)</h3>
+                    <p>Cinematic chemistry cover concept inspired by crime-drama aesthetic and dark background tones.</p>
+                </div>
+            </div>
+
+            <div class="gallery-item" onclick="openLightbox('boock cover 4.jpg', 'Science - Middle 3 (2nd Term)')">
+                <div class="img-wrapper">
+                    <img src="boock cover 4.jpg" alt="Science Middle 3 Second Term" class="gallery-img">
+                </div>
+                <div class="gallery-info">
+                    <span class="gallery-tag">PERIODIC TABLE / 2ND TERM</span>
+                    <h3>Science - Middle 3 (2nd Term)</h3>
+                    <p>Creative Science cover integrating futuristic periodic table elements with subtle green styling.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="image-modal" id="image-modal" onclick="closeLightbox(event)">
+        <div class="modal-content-box" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeLightboxDirect()"><i class="fas fa-times"></i></button>
+            <img src="" id="modal-img" class="modal-img" alt="Enlarged View">
+            <div class="modal-caption" id="modal-caption"></div>
+        </div>
+    </div>
+
+    <script>
+        // Custom Glow Cursor Logic
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorOutline = document.getElementById('cursor-outline');
+
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+            cursorOutline.style.left = `${posX}px`;
+            cursorOutline.style.top = `${posY}px`;
+        });
+
+        const modal = document.getElementById('image-modal');
+        const modalImg = document.getElementById('modal-img');
+        const modalCaption = document.getElementById('modal-caption');
+
+        function openLightbox(src, title) {
+            modalImg.src = src;
+            modalCaption.innerText = title;
+            modal.classList.add('active');
+        }
+
+        function closeLightboxDirect() { modal.classList.remove('active'); }
+        function closeLightbox(e) { if (e.target === modal) modal.classList.remove('active'); }
+
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightboxDirect(); });
+
+        // Canvas Cyber Particles
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize); resize();
+
+        let particles = Array.from({length: 50}, () => ({
+            x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+            size: Math.random() * 1.8 + 0.5, speedX: Math.random() * 0.5 - 0.25, speedY: Math.random() * 0.5 - 0.25,
+            color: Math.random() > 0.5 ? '#00ff66' : '#00d9f5'
+        }));
+
+        function animate() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            particles.forEach(p => {
+                p.x += p.speedX; p.y += p.speedY;
+                if(p.x > canvas.width) p.x = 0; if(p.x < 0) p.x = canvas.width;
+                if(p.y > canvas.height) p.y = 0; if(p.y < 0) p.y = canvas.height;
+                ctx.fillStyle = p.color; ctx.shadowBlur = 12; ctx.shadowColor = p.color;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+<script>
+    // 1. منع استخدام الكليك يمين
+    document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+    });
+
+    // 2. منع اختصارات لوحة المفاتيح الشهيرة للـ Inspect
+    document.addEventListener('keydown', function (e) {
+        if (
+            e.key === 'F12' ||
+            (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
+            (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's'))
+        ) {
+            e.preventDefault();
+            return false;
+        }
+    });
+    </script>
+</body>
+</html>

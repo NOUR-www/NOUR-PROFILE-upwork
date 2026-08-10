@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="main-html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOUR AMR | My Projects</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Plus+Jakarta+Sans:wght@400;600;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { 
+            --primary: #00ff66;
+            --accent: #00d9f5;
+            --bg: #050508; 
+            --card-bg: rgba(10, 16, 26, 0.75);
+            --card-hover: rgba(16, 28, 45, 0.9);
+            --border: rgba(0, 255, 102, 0.2);
+            --border-glow: rgba(0, 255, 102, 0.7);
+            --text: #f1f5f9; 
+            --text-dim: #94a3b8;
+            
+            --glow-primary: 0 0 30px rgba(0, 255, 102, 0.6);
+            --glow-accent: 0 0 25px rgba(0, 217, 245, 0.35);
+
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --font-cyber: 'Orbitron', sans-serif;
+            --font-code: 'Fira Code', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body { 
+            background-color: var(--bg); 
+            background-image: 
+                radial-gradient(circle at 50% 30%, rgba(0, 255, 102, 0.12) 0%, transparent 60%),
+                linear-gradient(rgba(0, 255, 102, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 102, 0.04) 1px, transparent 1px);
+            background-size: 100% 100%, 35px 35px, 35px 35px;
+            background-attachment: fixed;
+            color: var(--text); 
+            font-family: var(--font-main); 
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+            cursor: default;
+        }
+
+        /* Custom Glowing Cursor */
+        #cursor-dot {
+            width: 8px; height: 8px; background: var(--primary);
+            position: fixed; top: 0; left: 0; border-radius: 50%;
+            pointer-events: none; z-index: 99999; transform: translate(-50%, -50%);
+            box-shadow: var(--glow-primary); transition: transform 0.1s ease;
+        }
+        #cursor-outline {
+            width: 36px; height: 36px; border: 1.5px solid var(--primary);
+            position: fixed; top: 0; left: 0; border-radius: 50%;
+            pointer-events: none; z-index: 99998; transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, top 0.15s ease-out, left 0.15s ease-out;
+            opacity: 0.8;
+            box-shadow: inset 0 0 10px rgba(0, 255, 102, 0.3);
+        }
+
+        #canvas-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; pointer-events: none; }
+
+        .ambient-glow {
+            position: fixed; inset: 0;
+            background: 
+                radial-gradient(circle at 15% 15%, rgba(0, 255, 102, 0.09) 0%, transparent 50%),
+                radial-gradient(circle at 85% 85%, rgba(0, 217, 245, 0.08) 0%, transparent 50%);
+            z-index: -1; pointer-events: none;
+        }
+
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 18px 8%; position: fixed; top: 0; width: 100%; z-index: 100;
+            backdrop-filter: blur(25px); border-bottom: 1px solid var(--border);
+            background: rgba(5, 5, 8, 0.85);
+        }
+
+        .brand { 
+            font-family: var(--font-cyber); font-weight: 900; font-size: 1.4rem; 
+            color: #fff; letter-spacing: 2px; text-decoration: none; display: flex; align-items: center; gap: 10px;
+            text-shadow: 0 0 12px rgba(0, 255, 102, 0.3);
+        }
+
+        .brand-dot { 
+            width: 9px; height: 9px; background: var(--primary); 
+            border-radius: 50%; box-shadow: var(--glow-primary); 
+            animation: pulse 2s infinite; 
+        }
+
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 8px 22px; border: 1px solid var(--border-glow);
+            background: rgba(0, 255, 102, 0.08); color: var(--primary);
+            font-weight: 700; font-family: var(--font-cyber);
+            border-radius: 20px; text-decoration: none; font-size: 0.8rem;
+            transition: all 0.3s ease; box-shadow: 0 0 10px rgba(0, 255, 102, 0.15);
+        }
+        .back-btn:hover { background: var(--primary); color: #000; box-shadow: var(--glow-primary); transform: translateY(-2px); }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 150px 20px 80px; }
+
+        .page-title {
+            text-align: center; margin-bottom: 50px;
+        }
+        .page-title h1 {
+            font-family: var(--font-cyber); font-size: clamp(2rem, 5vw, 3.2rem);
+            color: #fff; font-weight: 900; letter-spacing: 3px;
+            text-shadow: 0 0 25px rgba(0, 255, 102, 0.3);
+        }
+        .page-title p {
+            color: var(--primary); font-family: var(--font-code); margin-top: 12px; font-size: 0.95rem;
+            background: rgba(10, 16, 26, 0.85); display: inline-block; padding: 8px 20px;
+            border-radius: 12px; border: 1px solid var(--border-glow); box-shadow: var(--glow-primary);
+        }
+
+        .projects-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 32px;
+        }
+
+        .project-card {
+            background: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 22px; overflow: hidden; backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); position: relative; display: flex; flex-direction: column;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+        }
+        .project-card:hover {
+            border-color: var(--border-glow); transform: translateY(-8px);
+            box-shadow: var(--glow-primary); background: var(--card-hover);
+        }
+
+        .project-banner {
+            width: 100%; height: 210px; background: rgba(0, 255, 102, 0.04);
+            border-bottom: 1px solid var(--border); position: relative;
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+        }
+        .project-banner i {
+            font-size: 4.2rem; color: var(--primary); opacity: 0.9;
+            filter: drop-shadow(0 0 20px var(--primary));
+            transition: 0.4s ease;
+        }
+        .project-card:hover .project-banner i { transform: scale(1.15) rotate(-5deg); filter: drop-shadow(0 0 30px var(--primary)); }
+
+        .project-body { padding: 28px; flex: 1; display: flex; flex-direction: column; }
+        
+        .project-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+        .tag {
+            padding: 5px 12px; background: rgba(0, 255, 102, 0.08);
+            border: 1px solid rgba(0, 255, 102, 0.25); border-radius: 12px;
+            font-family: var(--font-code); font-size: 0.75rem; color: var(--primary); font-weight: 600;
+        }
+
+        .project-title { font-family: var(--font-cyber); font-size: 1.3rem; color: #fff; margin-bottom: 12px; font-weight: 700; }
+        .project-desc { color: var(--text-dim); font-size: 0.93rem; line-height: 1.7; margin-bottom: 25px; flex: 1; }
+
+        .project-link {
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; padding: 16px; background: var(--primary);
+            color: #000; border-radius: 14px; text-decoration: none; font-weight: 900;
+            font-family: var(--font-cyber); font-size: 0.9rem; transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 102, 0.3); text-transform: uppercase;
+        }
+        .project-link:hover {
+            box-shadow: 0 0 35px var(--primary); transform: translateY(-2px); background: #2effb3;
+        }
+
+        @media (max-width: 768px) {
+            #cursor-dot, #cursor-outline { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="cursor-dot"></div>
+    <div id="cursor-outline"></div>
+
+    <canvas id="canvas-bg"></canvas>
+    <div class="ambient-glow"></div>
+
+    <nav>
+        <a href="index.html" class="brand">
+            <div class="brand-dot"></div>
+            NOUR.EXE
+        </a>
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> BACK TO HOME</a>
+    </nav>
+
+    <div class="container">
+        <div class="page-title">
+            <h1>SOFTWARE PROJECTS</h1>
+            <p>&gt; Software Applications & Development Gallery</p>
+        </div>
+
+        <div class="projects-grid">
+            
+            <!-- 🚀 Project Card: Mr. Amr Tanash Web Platform -->
+            <div class="project-card">
+                <div class="project-banner">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="project-body">
+                    <div class="project-tags">
+                        <span class="tag">HTML/CSS</span>
+                        <span class="tag">JavaScript</span>
+                        <span class="tag">Education</span>
+                    </div>
+                    <h3 class="project-title">Mr. Amr Tanash Platform</h3>
+                    <p class="project-desc">Comprehensive educational platform tailored for Science curricula spanning Grade 5 to Grade 8, featuring an intuitive interface and organized navigation for lessons and exams.</p>
+                    <a href="https://krkr1356.github.io/MR.AMR-TANASH/" target="_blank" class="project-link">
+                        LIVE PREVIEW <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ⚡ Mock Brand / Template Card: Modern High-End Fashion -->
+            <div class="project-card">
+                <div class="project-banner">
+                    <i class="fas fa-store"></i>
+                </div>
+                <div class="project-body">
+                    <div class="project-tags">
+                        <span class="tag">Mock Brand</span>
+                        <span class="tag">Template</span>
+                        <span class="tag">UI/UX</span>
+                    </div>
+                    <h3 class="project-title">High-End Fashion Store</h3>
+                    <p class="project-desc">Advanced high-end fashion mock brand template featuring a luxurious aesthetic and interactive UI elements, designed to showcase professional front-end development skills.</p>
+                    <a href="https://nour-www.github.io/modern-high-end-fashion-template/" target="_blank" class="project-link">
+                        LIVE PREVIEW <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 🛢️ Mock Brand / Template Card: Petroleum Company -->
+            <div class="project-card">
+                <div class="project-banner">
+                    <i class="fas fa-oil-well"></i>
+                </div>
+                <div class="project-body">
+                    <div class="project-tags">
+                        <span class="tag">Corporate</span>
+                        <span class="tag">Template</span>
+                        <span class="tag">Energy</span>
+                    </div>
+                    <h3 class="project-title">Petroleum Company Profile</h3>
+                    <p class="project-desc">Professional corporate energy website template built with a mobile-responsive design and industrial aesthetics, tailored to display enterprise solutions and project showcases.</p>
+                    <a href="https://nour-www.github.io/petro-tamplate/" target="_blank" class="project-link">
+                        LIVE PREVIEW <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Custom Glow Cursor Logic
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorOutline = document.getElementById('cursor-outline');
+
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+            cursorOutline.style.left = `${posX}px`;
+            cursorOutline.style.top = `${posY}px`;
+        });
+
+        // Canvas Particle Background
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize); resize();
+
+        let particles = Array.from({length: 50}, () => ({
+            x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+            size: Math.random() * 1.8 + 0.5, speedX: Math.random() * 0.5 - 0.25, speedY: Math.random() * 0.5 - 0.25,
+            color: Math.random() > 0.5 ? '#00ff66' : '#00d9f5'
+        }));
+
+        function animate() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            particles.forEach(p => {
+                p.x += p.speedX; p.y += p.speedY;
+                if(p.x > canvas.width) p.x = 0; if(p.x < 0) p.x = canvas.width;
+                if(p.y > canvas.height) p.y = 0; if(p.y < 0) p.y = canvas.height;
+                ctx.fillStyle = p.color; ctx.shadowBlur = 12; ctx.shadowColor = p.color;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+    <script>
+    // 1. منع استخدام الكليك يمين
+    document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+    });
+
+    // 2. منع اختصارات لوحة المفاتيح الشهيرة للـ Inspect
+    document.addEventListener('keydown', function (e) {
+        if (
+            e.key === 'F12' ||
+            (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
+            (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's'))
+        ) {
+            e.preventDefault();
+            return false;
+        }
+    });
+    </script>
+</body>
+</html>

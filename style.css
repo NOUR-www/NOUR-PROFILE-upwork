@@ -1,0 +1,296 @@
+:root { 
+    --neon-green: #00ff66; 
+    --neon-green-glow: rgba(0, 255, 102, 0.5);
+    --pure-white: #ffffff; 
+    --deep-black: #050508;
+    --card-bg: rgba(10, 16, 26, 0.75);
+    --glass-border: rgba(0, 255, 102, 0.2);
+}
+
+/* تنعيم السكرول */
+html {
+    scroll-behavior: smooth;
+}
+
+/* الماوس الأساسي: علامة استفهام نيون */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40' style='font-size:30px'><text y='30' x='0'>❓</text></svg>"), auto !important;
+}
+
+/* الماوس عند الوقوف (Hover): علامة تعجب */
+.interactive:hover, a:hover, button:hover, input:hover, textarea:hover, .social-btn:hover {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40' style='font-size:30px'><text y='30' x='0'>❗</text></svg>"), pointer !important;
+}
+
+/* الخلفية الاحترافية: شبكة سايبر ممتدة مع إشعاع نيون دافئ بالمنتصف */
+body { 
+    background-color: var(--deep-black); 
+    background-image: 
+        radial-gradient(circle at 50% 30%, rgba(0, 255, 102, 0.12) 0%, transparent 60%),
+        linear-gradient(rgba(0, 255, 102, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 102, 0.04) 1px, transparent 1px);
+    background-size: 100% 100%, 35px 35px, 35px 35px;
+    background-attachment: fixed;
+    color: var(--pure-white); 
+    font-family: 'Cairo', 'Poppins', sans-serif; 
+    overflow-x: hidden; 
+    -webkit-font-smoothing: antialiased;
+}
+
+/* الإنترو فيديو */
+#intro-screen { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: #000; 
+    z-index: 9999; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    transition: opacity 1s ease, visibility 1s ease; 
+}
+#intro-video { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+}
+
+/* أنميشن الظهور */
+.reveal { 
+    opacity: 0; 
+    transform: translateY(30px); 
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); 
+}
+.reveal.active { 
+    opacity: 1; 
+    transform: translateY(0); 
+}
+
+.container { 
+    max-width: 1100px; 
+    margin: 0 auto; 
+    padding: 60px 20px; 
+    text-align: center; 
+}
+
+/* إطار البروفايل المتوهج */
+.profile-frame { 
+    width: 180px; 
+    height: 180px; 
+    border: 3px solid var(--neon-green); 
+    border-radius: 50%; 
+    overflow: hidden; 
+    margin: 0 auto 30px; 
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+    box-shadow: 0 0 25px var(--neon-green-glow);
+}
+.profile-frame:hover { 
+    box-shadow: 0 0 50px var(--neon-green); 
+    transform: scale(1.08) rotate(5deg); 
+}
+.profile-img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+}
+
+/* الكروت وتأثير الزجاج الفخم (Glassmorphism) */
+.info-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 30px; 
+    margin: 60px 0; 
+}
+.premium-card { 
+    background: var(--card-bg); 
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    padding: 40px; 
+    border-radius: 30px; 
+    border: 1px solid var(--glass-border); 
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+}
+.premium-card:hover { 
+    border-color: var(--neon-green); 
+    transform: translateY(-10px); 
+    background: rgba(0, 255, 102, 0.05); 
+    box-shadow: 0 15px 35px rgba(0, 255, 102, 0.25);
+}
+.card-icon { 
+    font-size: 2.5rem; 
+    color: var(--neon-green); 
+    margin-bottom: 15px; 
+    display: inline-block;
+    filter: drop-shadow(0 0 10px var(--neon-green));
+}
+
+/* بوكس التواصل */
+.contact-box-premium { 
+    background: rgba(10, 16, 26, 0.8); 
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 40px; 
+    border-radius: 35px; 
+    border: 1px solid var(--glass-border); 
+    margin-top: 40px; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+.field-wrapper { 
+    position: relative; 
+    margin-bottom: 25px; 
+}
+.field-wrapper input, .field-wrapper textarea { 
+    width: 100%; 
+    background: transparent; 
+    border: none; 
+    border-bottom: 2px solid rgba(255, 255, 255, 0.15); 
+    color: white; 
+    padding: 12px 5px; 
+    outline: none; 
+    font-size: 1rem;
+    transition: border-color 0.4s;
+}
+.field-wrapper textarea {
+    resize: none; 
+    height: 100px;
+}
+.field-wrapper .line { 
+    position: absolute; 
+    bottom: 0; 
+    left: 50%; 
+    transform: translateX(-50%);
+    width: 0; 
+    height: 2px; 
+    background: var(--neon-green); 
+    box-shadow: 0 0 10px var(--neon-green);
+    transition: width 0.4s ease; 
+}
+.field-wrapper input:focus ~ .line, 
+.field-wrapper textarea:focus ~ .line { 
+    width: 100%; 
+}
+.field-wrapper input:focus, 
+.field-wrapper textarea:focus {
+    border-bottom-color: rgba(255, 255, 255, 0.3);
+}
+
+/* الزرار المضيء الألتيميت باللون النيون الفاقع */
+.glow-btn-ultimate { 
+    width: 100%; 
+    padding: 18px; 
+    background: var(--neon-green); 
+    color: #000000; 
+    border: none; 
+    border-radius: 50px; 
+    font-weight: 900; 
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    transition: all 0.3s ease; 
+    margin-top: 10px; 
+    box-shadow: 0 0 20px var(--neon-green-glow);
+}
+.glow-btn-ultimate:hover { 
+    background: #2effb3;
+    box-shadow: 0 0 40px var(--neon-green), 0 0 60px var(--neon-green-glow); 
+    transform: scale(1.02); 
+}
+
+/* السوشيال ميديا */
+.social-dock { 
+    position: fixed; 
+    bottom: 30px; 
+    right: 30px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+    z-index: 1000; 
+}
+.social-btn { 
+    width: 55px; 
+    height: 55px; 
+    border-radius: 50%; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    color: white; 
+    font-size: 24px; 
+    text-decoration: none; 
+    position: relative; 
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+    background: var(--card-bg); 
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border); 
+}
+.social-btn:hover { 
+    background: var(--neon-green); 
+    color: #000;
+    transform: scale(1.15); 
+    box-shadow: 0 0 25px var(--neon-green);
+}
+
+.tooltip { 
+    position: absolute; 
+    right: 70px; 
+    background: var(--pure-white); 
+    color: black; 
+    padding: 6px 12px; 
+    border-radius: 8px; 
+    font-size: 12px; 
+    font-weight: bold; 
+    opacity: 0; 
+    visibility: hidden; 
+    transition: all 0.3s ease; 
+    white-space: nowrap; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.social-btn:hover .tooltip { 
+    opacity: 1; 
+    visibility: visible; 
+    transform: translateX(-5px); 
+}
+
+/* زر اللغة */
+.lang-toggle { 
+    position: fixed; 
+    top: 30px; 
+    left: 30px; 
+    border: 2px solid var(--neon-green); 
+    color: var(--neon-green); 
+    background: rgba(0, 255, 102, 0.05); 
+    padding: 10px 20px; 
+    border-radius: 20px; 
+    font-weight: bold;
+    z-index: 1001; 
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(0, 255, 102, 0.2);
+}
+.lang-toggle:hover { 
+    background: var(--neon-green); 
+    color: #000; 
+    box-shadow: 0 0 25px var(--neon-green);
+}
+
+.developer-tag { 
+    margin-top: 60px; 
+    color: rgba(255,255,255,0.4); 
+    font-size: 0.9rem;
+}
+.developer-tag span { 
+    color: var(--neon-green); 
+    font-weight: bold; 
+    text-shadow: 0 0 8px var(--neon-green-glow);
+}
+
+/* تجاوب مع الموبايل */
+@media (max-width: 768px) {
+    .container { padding: 40px 15px; }
+    .profile-frame { width: 140px; height: 140px; }
+    .social-dock { bottom: 20px; right: 20px; gap: 10px; }
+    .social-btn { width: 45px; height: 45px; font-size: 18px; }
+    .lang-toggle { top: 20px; left: 20px; padding: 8px 15px; font-size: 0.9rem; }
+}
