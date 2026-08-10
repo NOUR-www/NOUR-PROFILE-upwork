@@ -12,6 +12,31 @@ html {
     scroll-behavior: smooth;
 }
 
+/* الشريط العلوي (Navbar) */
+nav {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    padding: 18px 8%; 
+    position: fixed; 
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    z-index: 9999;
+    backdrop-filter: blur(25px); 
+    -webkit-backdrop-filter: blur(25px);
+    border-bottom: 1px solid var(--glass-border);
+    background: rgba(5, 5, 8, 0.85);
+    gap: 20px;
+    transform: translateY(0); /* ثابت عند التحميل */
+    transition: transform 0.3s ease-in-out;
+}
+
+/* كلاس الإخفاء عند التمرير لأسفل */
+nav.nav-hidden {
+    transform: translateY(-100%);
+}
+
 /* الماوس الأساسي: علامة استفهام نيون */
 * { 
     margin: 0; 
@@ -48,7 +73,7 @@ body {
     width: 100%; 
     height: 100%; 
     background: #000; 
-    z-index: 9999; 
+    z-index: 99999; 
     display: flex; 
     justify-content: center; 
     align-items: center; 
@@ -288,6 +313,7 @@ body {
 
 /* تجاوب مع الموبايل */
 @media (max-width: 768px) {
+    nav { padding: 14px 5%; }
     .container { padding: 40px 15px; }
     .profile-frame { width: 140px; height: 140px; }
     .social-dock { bottom: 20px; right: 20px; gap: 10px; }
